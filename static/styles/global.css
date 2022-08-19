@@ -1,17 +1,7 @@
 /* COLORS */
 
 :root {
-	--dark-blue: 260, 30%, 6%;
-}
-body {
-	background-color: hsl(var(--dark-blue));
-	color: #CFCFCF;
-	font-size: 1.6rem;
-  height: 100%;
-}
-html {
-  min-height: 100%;
-  position: relative;
+	--dark-blue: 200, 70%, 15%;
 }
 /* Box sizing rules */
 *,
@@ -84,6 +74,16 @@ select {
 	font: inherit;
 }
 
+body {
+	background-color: hsl(var(--dark-blue));
+	color: #CFCFCF;
+	font-size: 1.6rem;
+  height: 100%;
+}
+html {
+  min-height: 100%;
+  position: relative;
+}
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
 	html:focus-within {
