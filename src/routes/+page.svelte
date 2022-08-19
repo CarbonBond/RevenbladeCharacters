@@ -7,10 +7,13 @@
 <main>
   <div class="flex flex-col">
     <form class="searchContainer">
-
-
-      <input class="searchbar" type="text" bind:value={searchValue} placeholder="SEARCH" />
-    </form >
+      <input
+        class="searchbar"
+        type="text"
+        bind:value={searchValue}
+        placeholder="SEARCH"
+      />
+    </form>
 
     {#await data}
       <p>...loading</p>
@@ -19,12 +22,14 @@
         {#each data.characters as character}
           {#if character.name.toLowerCase().includes(searchValue.toLowerCase())}
             <div class="character">
-              <a href="/{character.name}" class="flex-center">
-                <img
-                  src="/images/{character.name.toLowerCase()}/icon.png"
-                  alt={character.name}
-                />
-              </a>
+              <div class="wrapper">
+                <a href="/{character.name}" class="characterLink flex-center">
+                  <img
+                    src="/images/{character.name.toLowerCase()}/icon.png"
+                    alt={character.name}
+                  />
+                </a>
+              </div>
             </div>
           {/if}
         {/each}
@@ -79,23 +84,47 @@
     justify-content: center;
   }
 
+  .wrapper {
+    position: relative;
+  }
+
   .character {
     width: 215px;
     height: 130px;
     margin: 1em;
-
+    position: static;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .character > a {
-    width: 100%;
-    height: 100%;
+  .wrapper {
+    position: relative;
+    width: 215px;
+    height: 130px;
+  }
+  .characterLink {
+    position: absolute;
+    left:0;
+    top:0;
+    width: inherit;
+    height: inherit;
     box-shadow: 0px 3px 4px black, 0px 0px 3px black;
     color: hsl(206, 25%, 73%);
     font-size: 3rem;
     font-weight: bold;
     letter-spacing: 2px;
     text-transform: uppercase;
+    transition: width .5s, height .5s, left .5s, top .5s;
+  }
+
+  .characterLink:hover {
+    width: 258px;
+    left: -21.5px;
+    top: -16px;
+    height: 156px;
+  }
+  .character img {
+    height: 100%;
+    width: 100%;
   }
 </style>
