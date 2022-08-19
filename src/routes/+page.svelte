@@ -1,32 +1,66 @@
 <script>
-  const fetchImage = (async () => {
-    const response = await fetch("http://localhost:8080/query", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `
-          query findCharacters {
-            characters {
-            name
-          }
-        }`,
-      }),
-    });
-    return await response.json();
-  })();
+  /** @type {import('./$types').PageData} */
+  export let data;
+  let searchValue = "";
 </script>
 
 <main>
-  {#await fetchImage}
-    <p>...loading</p>
-  {:then data}
-    {#each data.data.characters as character}
-      <li>{character.name}</li>
-    {/each}
-  {:catch error}
-    <p>An error occurred!</p>
-    <p>{error}</p>
-  {/await}
+  <div class="flex flex-col">
+    <input type="text" bind:value={searchValue} />
+
+    {#await data}
+      <p>...loading</p>
+    {:then data}
+      <div class="flex flex-wrap">
+        {#each data.characters as character}
+          {#if character.name.toLowerCase().includes(searchValue)}
+            <div class="character">
+              <a href="/{character.name}">
+                <img
+                  src="/images/{character.name.toLowerCase()}/icon.png"
+                  alt={character.name}
+                />
+              </a>
+            </div>
+          {/if}
+        {/each}
+      </div>
+    {:catch error}
+      <p>An error occurred!</p>
+      <p>{error}</p>
+    {/await}
+  </div>
 </main>
+
+<style>
+  main {
+    height: 100%;
+    width: 100%;
+  }
+  .flex {
+    display: flex;
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+
+  .character {
+    width: 215px;
+    height: 130px;
+    margin: 1em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 2px black;
+  }
+  .character>a{
+
+      width: 100%;
+      height: 100%;
+  }
+
+</style>
