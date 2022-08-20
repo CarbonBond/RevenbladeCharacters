@@ -5,43 +5,72 @@
 </script>
 
 <main>
-  <div class="flex flex-col">
-    <form class="searchContainer">
-      <input
-        class="searchbar"
-        type="text"
-        bind:value={searchValue}
-        placeholder="SEARCH"
-      />
-    </form>
+  <div class="content">
+    <div class="flex flex-col">
+      <form class="searchContainer">
+        <input
+          class="searchbar"
+          type="text"
+          bind:value={searchValue}
+          placeholder="SEARCH"
+        />
+      </form>
 
-    {#await data}
-      <p>...loading</p>
-    {:then data}
-      <div class="characters flex flex-wrap">
-        {#each data.characters as character}
-          {#if character.name.toLowerCase().includes(searchValue.toLowerCase())}
-            <div class="character">
-              <div class="wrapper">
-                <a href="/{character.name}" class="characterLink flex-center">
-                  <img
-                    src="/images/{character.name.toLowerCase()}/icon.png"
-                    alt={character.name}
-                  />
-                </a>
+      {#await data}
+        <p>...loading</p>
+      {:then data}
+        <div class="characters flex flex-wrap flex-center-j">
+          {#each data.characters as character}
+            {#if character.name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())}
+              <div class="character">
+                <div class="wrapper">
+                  <a href="/{character.name}" class="characterLink flex-center">
+                    <img
+                      src="/images/{character.name.toLowerCase()}/icon.png"
+                      alt={character.name}
+                    />
+                  </a>
+                </div>
               </div>
-            </div>
-          {/if}
-        {/each}
-      </div>
-    {:catch error}
-      <p>An error occurred!</p>
-      <p>{error}</p>
-    {/await}
+            {/if}
+          {/each}
+        </div>
+      {:catch error}
+        <p>An error occurred!</p>
+        <p>{error}</p>
+      {/await}
+    </div>
   </div>
 </main>
 
 <style>
+  main {
+    position: fixed;
+
+    background-color: #000;
+    background-image: url("/images/character/upperBackground.png");
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    padding-top: 4rem;
+  }
+  .content {
+    padding: 4rem;
+    font-family: Oswald, sans-serif;
+    width: 100%;
+    height: 100%;
+    max-width: 100ch;
+    margin: auto;
+
+  }
   .searchContainer {
     width: 100%;
     height: 100%;
@@ -50,23 +79,19 @@
   }
   .searchbar {
     background-color: inherit;
-    border: solid 2px hsl(206, 25%, 43%);
+    border: solid 2px var(--dark-blue);
     border-radius: 2rem;
     height: 2rem;
     padding: 2rem;
-    color: hsl(206, 25%, 75%);
+    color: hsl(var(--dark-blue-num));
     font-size: 2rem;
     letter-spacing: 0.4px;
     font-weight: bold;
     flex: 1 0 auto;
   }
   .searchbar::placeholder {
-    color: hsl(206, 25%, 75%);
+    color: hsl(var(--dark-blue-num));
     text-align: center;
-  }
-  main {
-    height: 100%;
-    width: 100%;
   }
   .flex {
     display: flex;
@@ -78,6 +103,9 @@
     flex-wrap: wrap;
   }
 
+  .flex-center-j {
+    justify-content: center;
+  }
   .flex-center {
     display: flex;
     align-items: center;
@@ -104,8 +132,8 @@
   }
   .characterLink {
     position: absolute;
-    left:0;
-    top:0;
+    left: 0;
+    top: 0;
     width: inherit;
     height: inherit;
     box-shadow: 0px 3px 4px black, 0px 0px 3px black;
@@ -114,7 +142,7 @@
     font-weight: bold;
     letter-spacing: 2px;
     text-transform: uppercase;
-    transition: width .5s, height .5s, left .5s, top .5s;
+    transition: width 0.5s, height 0.5s, left 0.5s, top 0.5s;
   }
 
   .characterLink:hover {

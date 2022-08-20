@@ -1,7 +1,8 @@
 /* COLORS */
 
 :root {
-	--dark-blue: 200, 70%, 15%;
+	--dark-blue: hsl(225, 45%, 9%);
+	--dark-blue-num: 225, 45%, 9%;
 }
 /* Box sizing rules */
 *,
@@ -32,6 +33,7 @@ ol[role='list'] {
 
 /* Set default fontsize to 10px for easy rem math */
 html {
+  height:100%;
 	font-size: 10px;
 	font-family: 'Source Sans Pro', sans-serif;
 }

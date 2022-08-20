@@ -5,20 +5,20 @@
   </nav>
 </header>
 
-<div class="content">
-  <slot />
-</div>
+<slot />
 
 <style>
   header {
     width: 100vw;
     height: 4.1rem;
-    background-color: hsl(225, 45%, 9%);
+    background-color: var(--dark-blue);
     padding: 0 1em;
     font-family: Oswald, sans-serif;
     letter-spacing: 3px;
     font-weight: bold;
     font-size: 16px;
+    position: fixed;
+    z-index: 100;
   }
 
   nav {
@@ -39,7 +39,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 8em;
+    width: 10em;
     margin: 0 1em;
     color: hsl(206, 25%, 43%);
   }
@@ -47,11 +47,4 @@
     color: hsl(206, 25%, 63%);
   }
 
-  .content {
-    padding: 4rem;
-    font-family: Oswald, sans-serif;
-    width: 100%;
-    max-width: 100ch;
-    margin: auto;
-  }
 </style>
