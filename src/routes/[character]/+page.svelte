@@ -1,6 +1,37 @@
 <script>
+  import { onMount } from "svelte";
+  import { each } from "svelte/internal";
+
   /** @type {import('./$types').PageData} */
   export let data;
+  let levelIndex = 1;
+
+  let levelContainer;
+  let selectLevel = () => {
+    console.log("not Mounted")
+  }
+
+  let addSelectLevel = (level) => {
+    let levelDiv = levelContainer.querySelectorAll(`.level${level}`);
+    levelDiv[0].classList.add('selectLevel')
+    levelDiv.forEach((element) => {
+      element.classList.add("yellowText");
+    });
+  }
+
+  onMount(() => {
+    addSelectLevel(levelIndex);
+
+    selectLevel = (e) => {
+      let levelDivs = levelContainer.querySelectorAll(`.level${levelIndex}`);
+      levelDivs.forEach(element => {
+        element.classList.remove(`yellowText`)
+        element.classList.remove(`selectLevel`)
+      })
+      levelIndex = e.target.innerHTML;
+      addSelectLevel(levelIndex);
+    };
+  });
 </script>
 
 <main>
@@ -21,12 +52,58 @@
       </p>
     </div>
   </div>
+  <div class="LevelSection" bind:this={levelContainer}>
+    <div class="LevelContainer">
+      <div class="tableContainer">
+        <table>
+          <div />
+          <tr class="LevelRow">
+            <td>Level</td>
+            {#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as level, i}
+              <td class="tdLevel level{i + 1}" on:click={selectLevel}
+                >{level}</td
+              >
+            {/each}
+          </tr>
+          <tr class="HealthRow">
+            <td>Health</td>
+            {#each data.character.health as health, i}
+              <td class="level{i + 1}">{health}</td>
+            {/each}
+          </tr>
+          <tr class="PowerRow">
+            <td>Power</td>
+            {#each data.character.power as power, i}
+              <td class="level{i + 1}">{power}</td>
+            {/each}
+          </tr>
+        </table>
+      </div>
+
+      <div class="levelSelectionContainer">
+        <div class="LevelItem level">
+          Level:
+          <input type="number" bind:value={levelIndex} min="1" max="16" />
+        </div>
+        <div class="LevelItem health">
+          Health:
+          <span> {data.character.health[levelIndex - 1]} </span>
+        </div>
+        <div class="LevelItem power">
+          Power:
+          <span> {data.character.power[levelIndex - 1]} </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <style>
   main {
     font-family: Oswald, sans-serif;
   }
+
   .summary {
     position: absolute;
     padding: 2em;
@@ -103,5 +180,82 @@
     width: 100%;
     height: 100%;
     position: absolute;
+  }
+
+  .LevelSection {
+    width: 100%;
+    padding: 2rem;
+    height: fit-content;
+    box-shadow: 0 0 8px #000;
+    background: linear-gradient(220deg, #101415 0%, #252728 100%);
+  }
+
+  .tableContainer {
+    display: none;
+    font-size: 18px;
+    width: 1000px;
+  }
+
+  table {
+    table-layout: fixed;
+    width: inherit;
+  }
+
+  td {
+    width: 5%;
+    text-align: center;
+  }
+
+  .tdLevel {
+    width: 5%;
+    position: relative;
+    cursor: pointer;
+  }
+
+
+  .LevelContainer {
+    padding: 3rem 0;
+    width: inherit;
+    min-height: 150px;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+  }
+  .levelSelectionContainer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-wrap: wrap;
+  }
+
+  .selectLevel::after {
+    content: "";
+    position: absolute;
+    transform: translateX(-12px);
+    left: 50%;
+    top: -40%;
+    width: 0px;
+    height: 0px;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid #e8e8e8;
+  }
+
+  .yellowText {
+    color: yellow;
+  }
+
+  @media screen and (min-width: 1000px) {
+    .tableContainer {
+      display: block;
+    }
+    .levelSelectionContainer {
+      display: none;
+    }
   }
 </style>
