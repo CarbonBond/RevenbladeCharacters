@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { each } from "svelte/internal";
+  import Ability from "./ability.svelte";
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -8,27 +8,21 @@
 
   let levelContainer;
   let selectLevel = () => {
-    console.log("not Mounted")
-  }
+    console.log("not Mounted");
+  };
 
   let addSelectLevel = (level) => {
-    let levelDiv = levelContainer.querySelectorAll(`.level${level}`);
-    levelDiv[0].classList.add('selectLevel')
-    levelDiv.forEach((element) => {
-      element.classList.add("yellowText");
-    });
-  }
+    let levelDiv = levelContainer.querySelector(`[level="${level}"]`);
+    levelDiv.classList.add("selectLevel");
+  };
 
   onMount(() => {
     addSelectLevel(levelIndex);
 
     selectLevel = (e) => {
-      let levelDivs = levelContainer.querySelectorAll(`.level${levelIndex}`);
-      levelDivs.forEach(element => {
-        element.classList.remove(`yellowText`)
-        element.classList.remove(`selectLevel`)
-      })
-      levelIndex = e.target.innerHTML;
+      let levelDiv = levelContainer.querySelector(`[level="${levelIndex}"]`);
+      levelDiv.classList.remove(`selectLevel`);
+      levelIndex = e.currentTarget.getAttribute('level');
       addSelectLevel(levelIndex);
     };
   });
@@ -44,40 +38,28 @@
     <div class="summary">
       <h2>{data.name}</h2>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non
-        tincidunt arcu. Proin egestas pharetra justo sed placerat. Aenean
-        mollis, mi sed venenatis vulputate, arcu dolor egestas tortor, ut
-        scelerisque velit erat convallis purus. Maecenas mauris nisl, vulputate
-        id eleifend at, aliquet vel metus.
+        {data.character.lore}
       </p>
     </div>
   </div>
   <div class="LevelSection" bind:this={levelContainer}>
     <div class="LevelContainer">
       <div class="tableContainer">
-        <table>
-          <div />
-          <tr class="LevelRow">
-            <td>Level</td>
-            {#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as level, i}
-              <td class="tdLevel level{i + 1}" on:click={selectLevel}
-                >{level}</td
-              >
-            {/each}
-          </tr>
-          <tr class="HealthRow">
-            <td>Health</td>
-            {#each data.character.health as health, i}
-              <td class="level{i + 1}">{health}</td>
-            {/each}
-          </tr>
-          <tr class="PowerRow">
-            <td>Power</td>
-            {#each data.character.power as power, i}
-              <td class="level{i + 1}">{power}</td>
-            {/each}
-          </tr>
-        </table>
+        {#each [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as level}
+          {#if level == 0}
+            <div class="levelData">
+              <div>Level:</div>
+              <div>Health:</div>
+              <div>Power:</div>
+            </div>
+          {:else}
+            <div on:click={selectLevel} class="levelClick" {level}>
+              <div>{level}</div>
+              <div>{data.character.power[level - 1]}</div>
+              <div>{data.character.health[level - 1]}</div>
+            </div>
+          {/if}
+        {/each}
       </div>
 
       <div class="levelSelectionContainer">
@@ -94,9 +76,20 @@
           <span> {data.character.power[levelIndex - 1]} </span>
         </div>
       </div>
+
+      <div class="movement">
+        <p>
+          Movement Speed: {data.character.movement_speed}
+        </p>
+      </div>
     </div>
   </div>
 
+  <div class="ability">
+    <Ability ability={data.character.passive} />
+  </div>
+
+  <div class="selectLevel" style="display: none;" />
 </main>
 
 <style>
@@ -151,7 +144,7 @@
     min-height: 700px;
     background-color: #000;
     background-image: url("/images/character/upperBackground.png");
-    background-size: 100% 100%;
+    background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
     overflow: hidden;
@@ -187,31 +180,25 @@
     padding: 2rem;
     height: fit-content;
     box-shadow: 0 0 8px #000;
-    background: linear-gradient(220deg, #101415 0%, #252728 100%);
+    background: linear-gradient(220deg, #424265 0%, #424259 30%, #101025 100%);
   }
 
   .tableContainer {
     display: none;
-    font-size: 18px;
-    width: 1000px;
+    font-size: 20px;
+    width: 1200px;
+    display: flex;
   }
 
-  table {
-    table-layout: fixed;
-    width: inherit;
+  .tableContainer > *:nth-child(1) {
+    text-align: left;
+    font-weight: bold;
   }
 
-  td {
-    width: 5%;
+  .tableContainer > * {
     text-align: center;
+    margin: 4px;
   }
-
-  .tdLevel {
-    width: 5%;
-    position: relative;
-    cursor: pointer;
-  }
-
 
   .LevelContainer {
     padding: 3rem 0;
@@ -224,6 +211,7 @@
     align-items: center;
     font-size: 1.2em;
   }
+
   .levelSelectionContainer {
     display: flex;
     justify-content: space-evenly;
@@ -233,26 +221,35 @@
     flex-wrap: wrap;
   }
 
+  .levelClick {
+    cursor: pointer;
+  }
+
+  .selectLevel {
+    color: hsl(050, 70%, 60%);
+    position: relative;
+  }
+
   .selectLevel::after {
     content: "";
     position: absolute;
     transform: translateX(-12px);
     left: 50%;
-    top: -40%;
+    top: -20%;
     width: 0px;
     height: 0px;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
-    border-top: 12px solid #e8e8e8;
+    border-top: 12px solid hsl(050, 70%, 60%);
   }
 
-  .yellowText {
-    color: yellow;
+  .movement {
+    padding-top: 6rem;
   }
 
   @media screen and (min-width: 1000px) {
     .tableContainer {
-      display: block;
+      display: flex;
     }
     .levelSelectionContainer {
       display: none;
