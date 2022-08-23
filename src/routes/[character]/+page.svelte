@@ -2,11 +2,12 @@
   import { onMount } from "svelte";
   import Ability from "./ability.svelte";
   import Tabs from "./tabs.svelte";
-  import { power } from './stores.js'
+  import { power } from "./stores.js";
   /** @type {import('./$types').PageData} */
 
   export let data;
   let levelIndex = 1;
+  power.set(data.character.power[levelIndex - 1]);
 
   //ability tabs
   let abilities = [
@@ -64,9 +65,13 @@
     selectLevel = (e) => {
       let levelDiv = levelContainer.querySelector(`[level="${levelIndex}"]`);
       levelDiv.classList.remove(`selectLevel`);
-      levelIndex = e.currentTarget.getAttribute("level");
+      if (e.currentTarget.getAttribute("level")) {
+        levelIndex = e.currentTarget.getAttribute("level");
+        power.set(data.character.power[levelIndex - 1]);
+      } else {
+        power.set(data.character.power[levelIndex - 1]);
+      }
       addSelectLevel(levelIndex);
-      power.set(data.character.power[levelIndex-1])
     };
   });
 </script>
@@ -108,7 +113,13 @@
       <div class="levelSelectionContainer">
         <div class="LevelItem level">
           Level:
-          <input type="number" bind:value={levelIndex} min="1" max="16" />
+          <input
+            type="number"
+            bind:value={levelIndex}
+            on:change={selectLevel}
+            min="1"
+            max="16"
+          />
         </div>
         <div class="LevelItem health">
           Health:

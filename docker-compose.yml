@@ -1,0 +1,8 @@
+version: '3'
+services:
+  web: 
+    container_name: revenbladeheroes 
+    build: .
+    ports:
+      - "8088:80"
+    restart: unless-stopped 
