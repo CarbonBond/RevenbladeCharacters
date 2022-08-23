@@ -15,32 +15,27 @@
 {#each items as item}
 	{#if activeTabValue == item.value}
 	<div class="box">
-		<svelte:component this={item.component} ability={item.data} name={item.label}/>
+		<svelte:component this={item.component}  data={item.data} name={item.label}/>
 	</div>
 	{/if}
 {/each}
 <style>
-	.box {
-		padding: 10px 20px;
-	}
   ul {
     margin: 0 auto;
-    box-shadow: 0px 2px 6px #000;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     padding-left: 0;
     list-style: none;
-    border-bottom: 1px solid #dee2e6;
   }
 	li {
+    min-width: 100px;
 		margin-bottom: -1px;
+    text-align: center;
 	}
 
   span {
     border: 1px solid transparent;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
     display: block;
     padding: 0.5rem 1rem;
     cursor: pointer;

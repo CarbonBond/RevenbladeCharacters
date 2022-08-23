@@ -2,21 +2,13 @@
   import { onMount } from "svelte";
   import Ability from "./ability.svelte";
   import Tabs from "./tabs.svelte";
+  import { power } from './stores.js'
   /** @type {import('./$types').PageData} */
 
   export let data;
+  let levelIndex = 1;
 
   //ability tabs
-
-  // let abilities = [
-  //   "passive",
-  //   "primary",
-  //   "secondary",
-  //   "mobility",
-  //   "heavy",
-  //   "defensive"
-  // ]
-
   let abilities = [
     {
       label: "passive",
@@ -56,7 +48,6 @@
     },
   ];
 
-  let levelIndex = 1;
   let selectLevel = () => {
     console.log("not Mounted");
   };
@@ -75,6 +66,7 @@
       levelDiv.classList.remove(`selectLevel`);
       levelIndex = e.currentTarget.getAttribute("level");
       addSelectLevel(levelIndex);
+      power.set(data.character.power[levelIndex-1])
     };
   });
 </script>
@@ -137,7 +129,7 @@
   </div>
 
   <div class="tabSection">
-    <Tabs items={abilities} />
+    <Tabs bind:items={abilities} />
   </div>
   <!-- {#each abilities as ability } -->
   <!--   <Ability ability={data.character[ability]} name={ability} /> -->
@@ -156,6 +148,8 @@
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
+
+    min-height: 20em;
   }
 
   .summary {
