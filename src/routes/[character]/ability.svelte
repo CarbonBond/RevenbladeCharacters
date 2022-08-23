@@ -1,12 +1,14 @@
 <script>
   export let ability;
+  export let name;
   let data = JSON.parse(ability.data)
-  console.log(data);
+
 </script>
 
 <div class="container">
 
-  <h3>Passive: {ability.name}</h3>
+  <h3><span class="name">{name}</span>: {ability.name}</h3>
+  <p>{ability.description}</p>
 
   <div>
     
@@ -19,13 +21,17 @@
   .container {
     height: min-content;
     padding: 3em;
-    background-image: url("/images/character/upperBackground.png");
-    background-size: cover;
-    background-position: center bottom;
-    background-repeat: no-repeat;
   }
 
   h3 {
     font-size: 2em;
+  }
+
+  .name {
+    text-transform: capitalize;
+  }
+
+  p {
+    padding-left: 2em;
   }
 </style>

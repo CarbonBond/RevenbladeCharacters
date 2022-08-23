@@ -1,16 +1,67 @@
 <script>
   import { onMount } from "svelte";
   import Ability from "./ability.svelte";
-
+  import Tabs from "./tabs.svelte";
   /** @type {import('./$types').PageData} */
-  export let data;
-  let levelIndex = 1;
 
-  let levelContainer;
+  export let data;
+
+  //ability tabs
+
+  // let abilities = [
+  //   "passive",
+  //   "primary",
+  //   "secondary",
+  //   "mobility",
+  //   "heavy",
+  //   "defensive"
+  // ]
+
+  let abilities = [
+    {
+      label: "passive",
+      value: 1,
+      component: Ability,
+      data: data.character.passive,
+    },
+    {
+      label: "primary",
+      value: 2,
+      component: Ability,
+      data: data.character.primary,
+    },
+    {
+      label: "secondary",
+      value: 3,
+      component: Ability,
+      data: data.character.secondary,
+    },
+    {
+      label: "mobility",
+      value: 4,
+      component: Ability,
+      data: data.character.heavy,
+    },
+    {
+      label: "heavy",
+      value: 5,
+      component: Ability,
+      data: data.character.mobility,
+    },
+    {
+      label: "defensive",
+      value: 6,
+      component: Ability,
+      data: data.character.defensive,
+    },
+  ];
+
+  let levelIndex = 1;
   let selectLevel = () => {
     console.log("not Mounted");
   };
 
+  let levelContainer;
   let addSelectLevel = (level) => {
     let levelDiv = levelContainer.querySelector(`[level="${level}"]`);
     levelDiv.classList.add("selectLevel");
@@ -22,7 +73,7 @@
     selectLevel = (e) => {
       let levelDiv = levelContainer.querySelector(`[level="${levelIndex}"]`);
       levelDiv.classList.remove(`selectLevel`);
-      levelIndex = e.currentTarget.getAttribute('level');
+      levelIndex = e.currentTarget.getAttribute("level");
       addSelectLevel(levelIndex);
     };
   });
@@ -85,9 +136,12 @@
     </div>
   </div>
 
-  <div class="ability">
-    <Ability ability={data.character.passive} />
+  <div class="tabSection">
+    <Tabs items={abilities} />
   </div>
+  <!-- {#each abilities as ability } -->
+  <!--   <Ability ability={data.character[ability]} name={ability} /> -->
+  <!-- {/each } -->
 
   <div class="selectLevel" style="display: none;" />
 </main>
@@ -95,6 +149,13 @@
 <style>
   main {
     font-family: Oswald, sans-serif;
+  }
+
+  .tabSection {
+    background-image: url("/images/character/upperBackground.png");
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
   }
 
   .summary {
@@ -187,7 +248,6 @@
     display: none;
     font-size: 20px;
     width: 1200px;
-    display: flex;
   }
 
   .tableContainer > *:nth-child(1) {
@@ -247,7 +307,7 @@
     padding-top: 6rem;
   }
 
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1200px) {
     .tableContainer {
       display: flex;
     }
