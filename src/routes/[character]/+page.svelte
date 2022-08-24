@@ -9,45 +9,30 @@
   let levelIndex = 1;
   power.set(data.character.power[levelIndex - 1]);
 
-  //ability tabs
-  let abilities = [
-    {
-      label: "passive",
-      value: 1,
-      component: Ability,
-      data: data.character.passive,
-    },
-    {
-      label: "primary",
-      value: 2,
-      component: Ability,
-      data: data.character.primary,
-    },
-    {
-      label: "secondary",
-      value: 3,
-      component: Ability,
-      data: data.character.secondary,
-    },
-    {
-      label: "mobility",
-      value: 4,
-      component: Ability,
-      data: data.character.heavy,
-    },
-    {
-      label: "heavy",
-      value: 5,
-      component: Ability,
-      data: data.character.mobility,
-    },
-    {
-      label: "defensive",
-      value: 6,
-      component: Ability,
-      data: data.character.defensive,
-    },
+  let abilityList = [
+    "passive",
+    "primary",
+    "secondary",
+    "heavy",
+    "defensive",
+    "mobility",
   ];
+
+  let abilities = [];
+  let v = 1;
+  abilityList.forEach((ability) => {
+    abilities.push({
+      label: ability,
+      value: v,
+      component: Ability,
+      data: {
+        character_name: data.name,
+        ability_name:   ability,
+        ...data.character[ability],
+      },
+    });
+    v++;
+  });
 
   let selectLevel = () => {
     console.log("not Mounted");
@@ -187,6 +172,7 @@
     letter-spacing: 2px;
     line-height: 1.2;
     font-weight: 400;
+    padding-bottom: 2em;
   }
   .BackgroundGradient {
     width: 150%;
@@ -253,6 +239,8 @@
     display: none;
     font-size: 20px;
     width: 1200px;
+    justify-content: center;
+    align-items: center;
   }
 
   .tableContainer > *:nth-child(1) {
