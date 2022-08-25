@@ -108,7 +108,6 @@
   .container {
     height: min-content;
     min-height: 500px;
-    padding: 0 3em;
     display: flex;
     flex-direction: column;
   }
@@ -148,16 +147,20 @@
 
   .dataContainer {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 2fr 3.3fr;
+    font-size: 1.4rem;
   }
 
   .statID {
     text-transform: capitalize;
-    font-size: 18px;
+    font-size: 2.5rem;
+    grid-column: 1/4;
+    text-align: center;
   }
 
   .statDescription {
-    grid-column: 2/4;
+    text-align: center;
+    grid-column: 1/4;
     padding-bottom: 20px;
     padding-left: 8px;
     font-size: 14px;
@@ -173,6 +176,7 @@
     text-transform: capitalize;
     grid-column: 1/2;
     padding-right: 10px;
+    justify-self: right;
   }
 
   .stats {
@@ -182,7 +186,7 @@
   .percent {
     cursor: pointer;
     border-bottom: 2px dotted #cfcfcf;
-    width: 6ch;
+    width: 5.5ch;
     display: inline-block;
   }
 
@@ -194,7 +198,7 @@
     justify-content: center;
   }
 
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 600px) {
     .details {
       width: 600px;
     }
@@ -204,6 +208,15 @@
     }
     .image {
       width: 600px;
+    }
+    .dataContainer {
+      font-size: 1.8rem;
+    }
+    .statID, .statDescription {
+      text-align: left;
+    }
+    .key {
+      justify-self: left;
     }
   }
 </style>
