@@ -27,7 +27,7 @@
       component: Ability,
       data: {
         character_name: data.name,
-        ability_name:   ability,
+        ability_name: ability,
         ...data.character[ability],
       },
     });
@@ -97,8 +97,9 @@
 
       <div class="levelSelectionContainer">
         <div class="LevelItem level">
-          Level:
+          <p>Level</p>
           <input
+            class="input"
             type="number"
             bind:value={levelIndex}
             on:change={selectLevel}
@@ -267,6 +268,7 @@
 
   .levelSelectionContainer {
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
@@ -296,11 +298,38 @@
     border-top: 12px solid hsl(050, 70%, 60%);
   }
 
+  .LevelItem:first-child {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .level > p {
+    text-align: center;
+  }
+
+  .LevelItem {
+    margin-bottom: 2em;
+    font-size: 20px;
+  }
   .movement {
-    padding-top: 6rem;
+    font-size: 20px;
+  }
+
+  .input {
+    width: 100%;
+    text-align: center;
+    background-color: hsl(240, 24%, 18%);
+    border: 1px solid #cfcfcf;
+    border-radius: 18px;
+    padding: 4px 14px;
+    color: #cfcfcf;
+    text-indent: 3%;
   }
 
   @media screen and (min-width: 1200px) {
+    .movement {
+      padding-top: 6rem;
+    }
     .tableContainer {
       display: flex;
     }
