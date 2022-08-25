@@ -14,13 +14,14 @@
     powerValue = value;
   });
 
-  let percentEnter = (e) => {
-    console.log(e.currentTarget.getAttribute("percentValue"));
-    e.currentTarget.classList.add("percentValue");
-    console.log(e.currentTarget.classList);
-  };
-  let percentLeave = (e) => {
-    e.currentTarget.classList.remove("percentValue");
+  let showPercent = (e) => {
+    if (e.currentTarget.classList.contains("percentValue")) {
+      e.currentTarget.innerHTML = e.currentTarget.getAttribute("damageValue");
+    } else {
+      e.currentTarget.innerHTML =
+        e.currentTarget.getAttribute("percentValue") + "%";
+    }
+    e.currentTarget.classList.toggle("percentValue");
   };
 </script>
 
@@ -43,15 +44,14 @@
               <span class="statDescription">{replaceUnderscore(stat)}</span>
             {:else if Array.isArray(stat)}
               {#if key.includes("percent")}
-                <span class="key"
+                <span class="key "
                   >{replaceUnderscore(key).replace(" percent", "")}:</span
                 ><span class="stats">
                   {#each stat as value}
                     <span
-                      class="arrayValue"
-                      style="--percentValue: '{value}%'"
-                      on:mouseenter={percentEnter}
-                      on:mouseleave={percentLeave}
+                      class="arrayValue percent"
+                      on:click={showPercent}
+                      damageValue={(value * 0.01 * powerValue).toFixed(2)}
                       percentValue={value}
                       >{(value * 0.01 * powerValue).toFixed(2)}</span
                     >
@@ -67,13 +67,14 @@
                 </span>
               {/if}
             {:else if key.includes("percent")}
-              <span class="key"
+              <span class="key "
                 >{replaceUnderscore(key).replace(" percent", "")}:</span
               ><span class="stats "
                 ><span
-                  on:mouseenter={percentEnter}
-                  on:mouseleave={percentLeave}
+                  on:click={showPercent}
                   style="--percentValue: '{stat}%'"
+                  class="percent"
+                  damageValue={(stat * 0.01 * powerValue).toFixed(2)}
                   percentValue={stat}
                   >{(stat * 0.01 * powerValue).toFixed(2)}</span
                 ></span
@@ -112,8 +113,10 @@
     flex-direction: column;
   }
   section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     border-top: 1px solid white;
     padding: 20px;
     height: min-content;
@@ -124,7 +127,8 @@
   }
 
   .details {
-    align-self: center;
+    width: 100%;
+    padding-bottom: 30px;
   }
   .nameContainer {
     margin-bottom: 20px;
@@ -139,15 +143,11 @@
 
   .name,
   .description {
-    grid-column: 1 / 2;
-    justify-self: flex-start;
-    align-self: flex-start;
+    text-align: center;
   }
 
   .dataContainer {
     display: grid;
-    width: 100%;
-    margin: auto;
     grid-template-columns: 1fr 2fr;
   }
 
@@ -157,41 +157,53 @@
   }
 
   .statDescription {
-    grid-column: 1/3;
+    grid-column: 2/4;
     padding-bottom: 20px;
     padding-left: 8px;
     font-size: 14px;
   }
 
   .arrayValue {
-    padding-right: 5px;
+    margin-right: 5px;
+    width: 6ch;
+    display: inline-block;
   }
 
   .key {
     text-transform: capitalize;
     grid-column: 1/2;
+    padding-right: 10px;
   }
+
   .stats {
     grid-column: 2/3;
   }
 
-  .percentValue {
-    position: relative;
-    cursor: default;
-  }
-  .percentValue::after {
-    content: var(--percentValue);
-    position: absolute;
-    font-size: 13px;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: yellow;
+  .percent {
+    cursor: pointer;
+    border-bottom: 2px dotted #cfcfcf;
+    width: 6ch;
+    display: inline-block;
   }
 
   .image {
-    grid-column: 2/3;
-    align-self: center;
-    justify-self: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 800px) {
+    .details {
+      width: 600px;
+    }
+    .name,
+    .description {
+      text-align: left;
+    }
+    .image {
+      width: 600px;
+    }
   }
 </style>
