@@ -88,8 +88,8 @@
           {:else}
             <div on:click={selectLevel} class="levelClick" {level}>
               <div>{level}</div>
-              <div>{data.character.power[level - 1]}</div>
               <div>{data.character.health[level - 1]}</div>
+              <div>{data.character.power[level - 1]}</div>
             </div>
           {/if}
         {/each}
